@@ -3,3 +3,17 @@
 body {
 	font-family: 'Open Sans', sans-serif;
 }
+
+::selection {
+	background: #3d3d3d; /* Safari */
+	color: white;
+	}
+::-moz-selection {
+	background: #3d3d3d; /* Firefox */
+	color: white;
+}
+
+#content {
+	margin: 0 auto;
+	width: 50%;
+}
