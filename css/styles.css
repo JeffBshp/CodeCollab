@@ -1,7 +1,10 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
 
 body {
+	margin: 0;
 	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	background: #EDEDED;
 }
 
 ::selection {
@@ -13,7 +16,68 @@ body {
 	color: white;
 }
 
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	text-decoration: none;
+	color: #AAAAAA;
+	border-bottom: 1px solid #AAAAAA;
+}
+
+a:hover {
+	-webkit-transition: background .3s;
+	transition: background .3s;
+	border-bottom: none;
+	background: #AAAAAA;
+	color: white;
+}
+
+#nav {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 50px;
+	background: #CCCCCC;
+	z-index: 1;
+}
+
+.clearfix:before,
+.clearfix:after {
+	content: " ";
+	display: block;
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+p {
+	padding: 0px;
+	margin: 0px;
+}
+
 #content {
-	margin: 0 auto;
-	width: 50%;
+	margin: 50px auto;
+	width: 1024px;
+	background: #FFFFFF;
+}
+
+#col1 {
+	width: 758px;
+	padding-left: 5px;
+	padding-right: 5px;
+	float: left;
+	background: #FFCC33;
+}
+
+#col2 {
+	width: 246px;
+	padding-left: 5px;
+	padding-right: 5px;
+	float: right;
+	background: #FF0000;
 }
