@@ -46,9 +46,7 @@ if(!$id = Input::get('id')) {
 </head>
 
 <body>
-<div id="nav">
-	<a href="index.php">HOME</a>
-</div>
+<?php require_once 'includes/navigation.php'; ?>
 <div id="content" class="clearfix">
 	<div class="lcol">
 	<h1><?php echo $data->title ?></h1>
@@ -60,9 +58,7 @@ if(!$id = Input::get('id')) {
 		<?php echo $data->content ?>
 	</div>
 	<div class="rcol">
-		<form method="get" action="search.php">
-			<input class="search" type="text" placeholder="Search" name="s" />
-		</form>
+		<?php require_once 'includes/searchbar.php'; ?>
 	</div>
 
 	<div class="lcol" style="background: #F4F4F4; border-top: 1px solid #DDDDDD;">

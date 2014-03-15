@@ -5,6 +5,7 @@ if(Session::exists('home')) {
 	echo '<p>' . Session::flash('home') . '</p>';
 }
 ?>
+
 <!DOCTYPE html>
 <head>
 	<title>CodeCollab</title>
@@ -12,36 +13,10 @@ if(Session::exists('home')) {
 	<link rel="stylesheep" type="text/css" media="all" href="css/normalize.css" />
 	<link rel="stylesheet" type="text/css" media="all" href="css/styles.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script>
-		$(document).ready(function() {
-   			$('.search').keydown(function(event) {
-	        	if (event.keyCode == 13) {
-	            this.form.submit();
-	            return false;
-         		}
-    		});
-		});
-	</script>
 </head>
 
 <body>
-<div id="nav">
-	<a href="index.php">HOME</a>
-	<?php
-	$user = new User();
-	if($user->isLoggedIn()) {
-		?>
-		&nbsp;&nbsp;&nbsp;<a href="profile.php?user=<?php echo escape($user->data()->username); ?>"><?php echo escape($user->data()->username); ?></a>
-		&nbsp;&nbsp;&nbsp;<a href="logout.php">Log Out</a>
-		<?php
-	} else {
-		?>
-		&nbsp;&nbsp;&nbsp;<a href="login.php">Log In</a>
-		&nbsp;&nbsp;&nbsp;<a href="register.php">Register</a>
-		<?php
-	}
-	?>
-</div>
+<?php require_once 'includes/navigation.php'; ?>
 <div id="content" class="clearfix">
 	<div class="lcol">
 		<h1>CodeCollab Home Page</h1>
@@ -72,9 +47,7 @@ if(Session::exists('home')) {
 		<hr />
 	</div>
 	<div class="rcol">
-		<form method="get" action="search.php">
-			<input class="search" type="text" placeholder="Search" name="s" />
-		</form>
+		<?php require_once 'includes/searchbar.php'; ?>
 	</div>
 </div>
 </body>
