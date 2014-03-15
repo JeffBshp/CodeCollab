@@ -5,11 +5,11 @@ if(!$username = Input::get('user')) {
 	Redirect::to('index.php');
 } else {
 	$user = new User($username);
-	if(!$user->exists()) {
+	if($user->exists()) {
+		$data = $user->data();
+	} else {
 		Session::flash('home', 'Page does not exist.');
 		Redirect::to('index.php');
-	} else {
-		$data = $user->data();
 	}
 	
 	$viewer = new User();

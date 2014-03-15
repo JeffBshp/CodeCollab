@@ -91,7 +91,7 @@ if(Input::exists()) {
 	</div>
 	<div class="field">
 		<label for="about">About</label><br>
-		<textarea name="about" cols="40" rows="10"><?php echo (Input::get('about') ? Input::get('about') : escape($user->data()->about)) ?></textarea>
+		<textarea name="about" cols="40" rows="10"><?php echo (Input::get('about') ? escape(Input::get('about')) : escape($user->data()->about)) ?></textarea>
 	</div>
 	<input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
 	<input type="submit" value="Submit">
