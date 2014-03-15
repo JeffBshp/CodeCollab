@@ -3,10 +3,10 @@ session_start();
 
 $GLOBALS['config'] = array(
 	'mysql' => array(
-		'host' => 'cse.unl.edu:3306',
-		'username' => 'jbishop',
-		'password' => '3y7xNd',
-		'database' => 'jbishop'
+		'host' => '127.0.0.1',
+		'username' => 'root',
+		'password' => '',
+		'database' => 'csce361'
 	),
 	'session' => array(
 		'session_name' => 'user',

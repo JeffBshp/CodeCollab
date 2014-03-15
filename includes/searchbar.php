@@ -1,13 +1,22 @@
 <?php
 require_once 'core/init.php';
-
-if(Session::exists('home')) {
-	echo '<p>' . Session::flash('home') . '</p>';
-}
 ?>
 
+
+
 <form method="get" action="search.php">
-	<input class="search" type="text" placeholder="Search" name="query" />
+	<input class="search" type="text" value="<?php echo Input::get('query'); ?>" placeholder="Search" name="query" /><br />
+
+	<?php
+	if(Input::get('order') == "date") {
+		echo '<input type="radio" name="order" value="score" />Score';
+		echo '<input type="radio" name="order" value="date" checked />Date';
+	} else {
+		echo '<input type="radio" name="order" value="score" checked />Score';
+		echo '<input type="radio" name="order" value="date" />Date';
+	}
+	?>
+	
 </form>
 
 <script>

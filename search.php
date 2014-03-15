@@ -26,13 +26,25 @@ if(Session::exists('home')) {
 			$validate = new Validate();
 			$validation = $validate->check($_GET, array(
 				'query' => array('required' => true),
+				'order' => array()
 			));
 		
 			if($validation->passed()) {
-				echo '<br />Currently searching for: <b>' . Input::get('query') . '<b>';
+				echo '<br />Currently searching for: <b>' . Input::get('query') . '</b>';
+				if(Input::get('order') === "date") {
+					$order = "date";
+				} else {
+					$order = "score";
+				}
+				echo '<br />Ordering search by: <b>' . $order . '</b>';
 				echo '<hr />';
 
-				
+				$searchResults = SearchResult::generateResults(Input::get('query'), $order);
+
+				foreach($searchResults as $result) {
+					echo $result;
+				}
+
 				
 			} else {
 				foreach($validation->errors() as $error) {
