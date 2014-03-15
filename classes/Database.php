@@ -30,11 +30,10 @@ class Database {
 			if(count($params)) {
 				foreach($params as $param) {
 					$this-> _query->bindValue($x, $param);
-					//echo 'Param: ' . $param . '<br>';
 					$x++;
 				}
 			}
-			//echo 'SQL: ' . $sql . '<br>';
+			
 			if($this->_query->execute()) {
 				$this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
 				$this->_count = $this->_query->rowCount();
@@ -58,15 +57,20 @@ class Database {
 					return $this;
 				}
 			}
+		} else {
+			$sql = "{$action} FROM {$table}";
+			if(!$this->query($sql, array())->error()) {
+				return $this;
+			}
 		}
 		return false;
 	}
 	
-	public function get($table, $where) {
+	public function get($table, $where = array()) {
 		return $this->action('SELECT *', $table, $where);
 	}
 	
-	public function delete($table, $where) {
+	public function delete($table, $where = array()) {
 		return $this->action('DELETE', $table, $where);
 	}
 	
@@ -125,6 +129,10 @@ class Database {
 	
 	public function count() {
 		return $this->_count;
+	}
+	
+	public function pdo() {
+		return $this->_pdo;
 	}
 }
 ?>
