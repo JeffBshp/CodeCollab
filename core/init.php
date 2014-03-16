@@ -10,7 +10,8 @@ $GLOBALS['config'] = array(
 	),
 	'session' => array(
 		'session_name' => 'user',
-		'token_name' => 'token'
+		'token_name_1' => 'token1',
+		'token_name_2' => 'token2'
 	)
 );
 

@@ -21,33 +21,28 @@ if(Session::exists('home')) {
 	<div class="lcol">
 		<h1>CodeCollab Home Page</h1>
 		<br /><br />
-		<h3><a href="post.php?p=999">Post title for postId: 999</a></h3>
-		<p style="font-style: italic;">Author: username1</p>
-		<hr />
-		<h3><a href="post.php?p=998">Post title for postId: 998</a></h3>
-		<p style="font-style: italic;">Author: username2</p>
-		<hr />
-		<h3><a href="post.php?p=997">Post title for postId: 997</a></h3>
-		<p style="font-style: italic;">Author: username3</p>
-		<hr />
-		<h3><a href="post.php?p=996">Post title for postId: 996</a></h3>
-		<p style="font-style: italic;">Author: username4</p>
-		<hr />
-		<h3><a href="post.php?p=995">Post title for postId: 995</a></h3>
-		<p style="font-style: italic;">Author: username5</p>
-		<hr />
-		<h3><a href="post.php?p=994">Post title for postId: 994</a></h3>
-		<p style="font-style: italic;">Author: username6</p>
-		<hr />
-		<h3><a href="post.php?p=993">Post title for postId: 993</a></h3>
-		<p style="font-style: italic;">Author: username7</p>
-		<hr />
-		<h3><a href="post.php?p=992">Post title for postId: 992</a></h3>
-		<p style="font-style: italic;">Author: username8</p>
-		<hr />
+		<?php
+			$database = Database::getInstance();
+			$posts = $database->get('Post', array())->results();
+			for($i=0; $i<8; $i++) {
+				$post = $posts[$i];
+				$author = new User($post->user_id);
+				echo "<h3><a href='post.php?p=" . $post->id . "'>" . $post->title . "</a></h3>
+					<p style='font-style: italic;'>Author: <a href='profile.php?user=" . $author->data()->username . "'>" . $author->data()->username . "</a></p>
+					<hr />";
+			}
+		?>
 	</div>
 	<div class="rcol">
 		<?php require_once 'includes/searchbar.php'; ?>
+		<hr />
+		<?php
+		if($viewer->isLoggedIn()) {
+			?>
+			<a href="createpost.php">Create a new post</a>
+			<?php
+		}
+		?>
 	</div>
 </div>
 </body>

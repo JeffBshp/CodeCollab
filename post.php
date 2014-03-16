@@ -9,6 +9,7 @@ $database = Database::getInstance();
 $viewer = new User();
 $post = new Post($id);
 $promoted = false;
+$owned = false;
 
 if($post->exists()) {
 	$data = $post->data();
@@ -28,11 +29,38 @@ if($viewer->isLoggedIn()) {
 	}
 	
 	if($viewer->data()->id === $data->user_id) {
-		// viewer is viewing his or her own post
+		$owned = true;
 	}
 	
 	if(Input::exists()) {
-		if(Token::check(Input::get('comment_token'))) {
+		if(Token::check(Input::get('promote_token'), 'token_name_1')) {
+			if($promoted) {
+				try {
+					$promote_id = 0;
+					foreach($database->get('Promotion', array('user_id', '=', $viewer->data()->id))->results() as $promotion) {
+						if($promotion->post_id === $data->id) {
+							$promote_id = $promotion->id;
+						}
+					}
+					$database->delete('Promotion', array('id', '=', $promote_id));
+					Redirect::to('post.php?id=' . $data->id);
+				} catch(Exception $e) {
+					die($e->getMessage());
+				}
+			} else {
+				try {
+					$database->insert('Promotion', array(
+						'post_id' => $data->id,
+						'user_id' => $viewer->data()->id,
+						'promotion_date' => date('Y-m-d H:i:s')
+					));
+					
+					Redirect::to('post.php?id=' . $data->id);
+				} catch(Exception $e) {
+					die($e->getMessage());
+				}
+			}
+		} else if(Token::check(Input::get('comment_token'), 'token_name_2')) {
 			$validate = new Validate();
 			$validation = $validate->check($_POST, array(
 				'comment' => array(
@@ -60,33 +88,6 @@ if($viewer->isLoggedIn()) {
 					echo $error, '<br>';
 				}
 				echo '<br>';
-			}
-		} else if(Token::check(Input::get('promote_token'))) {
-			if($promoted) {
-				try {
-					$promote_id = 0;
-					foreach($database->get('Promotion', array('user_id', '=', $viewer->data()->id))->results() as $promotion) {
-						if($promotion->post_id === $data->id) {
-							$promote_id = $promotion->id;
-						}
-					}
-					$database->delete('Promotion', array('id', '=', $promote_id));
-					Redirect::to('post.php?id=' . $data->id);
-				} catch(Exception $e) {
-					die($e->getMessage());
-				}
-			} else {
-				try {
-					$database->insert('Promotion', array(
-						'post_id' => $data->id,
-						'user_id' => $viewer->data()->id,
-						'promotion_date' => date('Y-m-d H:i:s')
-					));
-					
-					Redirect::to('post.php?id=' . $data->id);
-				} catch(Exception $e) {
-					die($e->getMessage());
-				}
 			}
 		}
 	}
@@ -118,19 +119,19 @@ if($viewer->isLoggedIn()) {
 	<div class="lcol">
 	<h1><?php echo $data->title ?></h1>
 	<p><em>
-		<a href="profile.php?user=<?php echo $user->data()->username ?>"><?php echo $user->data()->username ?></a><br>
+		<a href="profile.php?user=<?php echo $user->data()->username; ?>"><?php echo $user->data()->username; ?></a><br>
 		<?php echo escape($data->post_date) ?>
 	</em></p>
 	
 	<?php
 	if($promoted) {
 		echo "<form action='' method='post'>
-			<input type='hidden' name='promote_token' value='". Token::generate() ."'>
+			<input type='hidden' name='promote_token' value='". Token::generate('token_name_1') ."'>
 			<input type='submit' value='Undo Promotion'>
 			</form>";
-	} else if($viewer->isLoggedIn()) {
+	} else if($viewer->isLoggedIn() && !$owned) {
 		echo "<form action='' method='post'>
-			<input type='hidden' name='promote_token' value='". Token::generate() ."'>
+			<input type='hidden' name='promote_token' value='". Token::generate('token_name_1') ."'>
 			<input type='submit' value='Promote'>
 			</form>";
 	}
@@ -151,7 +152,7 @@ if($viewer->isLoggedIn()) {
 				<label for="comment">Leave a comment:</label><br>
 				<textarea name="comment" cols="40" rows="5"><?php echo escape(Input::get('comment')) ?></textarea>
 			</div>
-			<input type="hidden" name="comment_token" value="<?php echo Token::generate(); ?>">
+			<input type="hidden" name="comment_token" value="<?php echo Token::generate('token_name_2'); ?>">
 			<input type="submit" value="Submit">
 		</form>
 		<hr />

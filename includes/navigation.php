@@ -1,10 +1,10 @@
 <div id="nav">
 	<a href="index.php">HOME</a>
 	<?php
-	$user = new User();
-	if($user->isLoggedIn()) {
+	$viewer = new User();
+	if($viewer->isLoggedIn()) {
 		?>
-		&nbsp;&nbsp;&nbsp;<a href="profile.php?user=<?php echo escape($user->data()->username); ?>"><?php echo escape($user->data()->username); ?></a>
+		&nbsp;&nbsp;&nbsp;<a href="profile.php?user=<?php echo escape($viewer->data()->username); ?>"><?php echo escape($viewer->data()->username); ?></a>
 		&nbsp;&nbsp;&nbsp;<a href="logout.php">Log Out</a>
 		<?php
 	} else {
