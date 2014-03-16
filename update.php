@@ -39,7 +39,7 @@ if(Input::exists()) {
 				));
 				
 				Session::flash('home', 'Your information has been updated.');
-				Redirect::to('index.php');
+				Redirect::to('profile.php?user=' . $user->data()->username);
 				
 			} catch(Exception $e) {
 				die($e->getMessage());

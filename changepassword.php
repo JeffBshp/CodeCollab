@@ -38,7 +38,7 @@ if(Input::exists()) {
 					));
 					
 					Session::flash('home', 'Your password has been changed.');
-					Redirect::to('index.php');
+					Redirect::to('profile.php?user=' . $user->data()->username);
 					
 				} catch(Exception $e) {
 					die($e->getMessage());

@@ -74,8 +74,8 @@ if(Input::exists()) {
 			<select name="language">
 				<option selected value="0">None</option>
 				<?php
-				foreach($database->get('Languages', array())->results() as $result) {
-					echo "<option value=\"{$result->id}\">{$result->language_name}</option>";
+				foreach($database->get('Languages', array())->results() as $language) {
+					echo "<option value=\"{$language->id}\">{$language->language_name}</option>";
 				}
 				?>
 			</select>
