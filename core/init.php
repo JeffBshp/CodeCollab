@@ -16,8 +16,15 @@ $GLOBALS['config'] = array(
 );
 
 spl_autoload_register(function($class) {
-	require_once 'classes/' . $class . '.php';
+	$exploded = explode("\\", $class);
+	if($exploded[0] != "Michelf" && $class != "Markdown") {
+		require_once 'classes/' . $class . '.php';
+	} else {
+		require_once 'Michelf/MarkdownInterface.php';
+		require_once 'Michelf/Markdown.php';
+	}
 });
+
 
 require_once 'functions/sanitize.php';
 ?>

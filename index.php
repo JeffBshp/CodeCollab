@@ -23,7 +23,19 @@ if(Session::exists('home')) {
 		<br /><br />
 		<?php
 			$database = Database::getInstance();
-			$posts = $database->get('Post', array())->results();
+			$posts = $database->query('SELECT * FROM Post ORDER BY post_date DESC LIMIT 10');
+			foreach($posts->results() as $post) {
+				$author = new User($post->user_id);
+				$date = new DateTime($post->post_date);
+				$date = $date->format('F d, Y \a\t h:ia');
+				echo "<h3><a href='post.php?id=" . $post->id . "'>" . $post->title . "</a></h3><br /><em style='font-size: 12px;'>". $date ."</em>
+					<p style='font-style: italic;'>Author: <a href='profile.php?user=" . $author->data()->username . "'>" . $author->data()->username . "</a></p>
+					<hr />";
+			}
+
+
+			/*$posts = $database->get('Post', array())->results();
+
 			for($i=0; $i<8; $i++) {
 				$post = $posts[$i];
 				$author = new User($post->user_id);
@@ -31,6 +43,7 @@ if(Session::exists('home')) {
 					<p style='font-style: italic;'>Author: <a href='profile.php?user=" . $author->data()->username . "'>" . $author->data()->username . "</a></p>
 					<hr />";
 			}
+			*/
 		?>
 	</div>
 	<div class="rcol">

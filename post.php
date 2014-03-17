@@ -138,7 +138,10 @@ if($viewer->isLoggedIn()) {
 	?>
 	
 	<hr />
-		<?php echo $data->content ?>
+		<?php
+		use \Michelf\Markdown;
+		echo Markdown::defaultTransform($data->content);
+		?>
 	</div>
 	<div class="rcol">
 		<?php require_once 'includes/searchbar.php'; ?>
