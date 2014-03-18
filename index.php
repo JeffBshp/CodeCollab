@@ -32,30 +32,10 @@ if(Session::exists('home')) {
 					<p style='font-style: italic;'>Author: <a href='profile.php?user=" . $author->data()->username . "'>" . $author->data()->username . "</a></p>
 					<hr />";
 			}
-
-
-			/*$posts = $database->get('Post', array())->results();
-
-			for($i=0; $i<8; $i++) {
-				$post = $posts[$i];
-				$author = new User($post->user_id);
-				echo "<h3><a href='post.php?p=" . $post->id . "'>" . $post->title . "</a></h3>
-					<p style='font-style: italic;'>Author: <a href='profile.php?user=" . $author->data()->username . "'>" . $author->data()->username . "</a></p>
-					<hr />";
-			}
-			*/
 		?>
 	</div>
 	<div class="rcol">
 		<?php require_once 'includes/searchbar.php'; ?>
-		<hr />
-		<?php
-		if($viewer->isLoggedIn()) {
-			?>
-			<a href="createpost.php">Create a new post</a>
-			<?php
-		}
-		?>
 	</div>
 </div>
 </body>

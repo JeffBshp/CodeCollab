@@ -36,6 +36,10 @@ CREATE TABLE Languages
 	PRIMARY KEY (id)
 );
 
+INSERT INTO Languages (language_name) VALUES
+	('C'), ('C++'), ('Java'), ('Javascript'),
+	('SQL'), ('PHP'), ('HTML'), ('Actionscript');
+
 CREATE TABLE Post
 (
 	id					INT NOT NULL AUTO_INCREMENT,

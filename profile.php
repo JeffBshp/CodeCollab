@@ -17,16 +17,11 @@ if($user->exists()) {
 $follows = false;
 $followed = false;
 $owned = false;
-
 $viewer = new User();
 if($viewer->isLoggedIn()) {
 	if($viewer->data()->id === $data->id) {
 		$owned = true;
-		?>
-		<p><a href="update.php">Edit Profile</a></p>
-		<p><a href="changepassword.php">Change Password</a></p>
-		<?php
-	} else {
+	}/* else {
 		foreach($database->get('Follow', array('follower_id', '=', $data->id))->results() as $follow) {
 			if($follow->followee_id === $viewer->data()->id) {
 				$follows = true;
@@ -37,10 +32,10 @@ if($viewer->isLoggedIn()) {
 				$followed = true;
 			}
 		}
-	}
+	}*/
 }
 
-if(Input::exists()) {
+/*if(Input::exists()) {
 	if(Token::check(Input::get('token'))) {
 		if($followed) {
 			try {
@@ -68,54 +63,85 @@ if(Input::exists()) {
 			}
 		}
 	}
-}
+}*/
 ?>
 
-<p><a href="index.php">Home</a></p>
+<!DOCTYPE html>
+<head>
+	<title>CodeCollab User: <?php echo $data->username ?></title>
+	<meta charset="utf-8">
+	<link rel="stylesheep" type="text/css" media="all" href="css/normalize.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="css/styles.css" />
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+</head>
 
-<h3><?php echo escape($data->username) ?></h3>
+<body>
+<?php require_once 'includes/navigation.php'; ?>
+<div id="content" class="clearfix">
+	<div class="lcol">
 
-<?php
-if($viewer->isLoggedIn()) {
-	if($follows) {
-		echo "<p>{$data->username} follows you.</p>";
-	}
-	if($followed) {
-		echo "<form action='' method='post'>
-			<input type='hidden' name='token' value='". Token::generate() ."'>
-			<input type='submit' value='Unfollow'>
-			</form>";
-	} else if(!$owned) {
-		echo "<form action='' method='post'>
-			<input type='hidden' name='token' value='". Token::generate() ."'>
-			<input type='submit' value='Follow'>
-			</form>";
-	}
-}
-?>
-
-<?php
-if($data->name_visible) {
-	?>
-	<p><?php echo 'Full Name: ' . escape($data->first_name . ' ' . $data->last_name) ?></p>
-	<?php
-}
-?>
-
-<?php
-if($data->email_visible) {
-	?>
-	<p><?php echo 'Email Address: ' . escape($data->email) ?></p>
-	<?php
-}
-?>
-
-<p><?php echo 'Joined: ' . escape($data->registration_date) ?></p>
-
-<?php
-if($data->about_visible) {
-	?>
-	<p><?php echo 'About: ' . escape($data->about) ?></p>
-	<?php
-}
-?>
+		<?php
+		echo '<p><h3>' . escape($data->username) . '</h3></p><hr />';
+		
+		/*if($viewer->isLoggedIn()) {
+			if($follows) {
+				echo "<p>{$data->username} follows you.</p>";
+			}
+			if($followed) {
+				echo "<form action='' method='post'>
+					<input type='hidden' name='token' value='". Token::generate() ."'>
+					<input type='submit' value='Unfollow'>
+					</form>";
+			} else if(!$owned) {
+				echo "<form action='' method='post'>
+					<input type='hidden' name='token' value='". Token::generate() ."'>
+					<input type='submit' value='Follow'>
+					</form>";
+			}
+		}
+		
+		if($data->name_visible) {
+			echo '<p>Full Name: ' . escape($data->first_name . ' ' . $data->last_name) . '</p>';
+		}
+		
+		if($data->email_visible) {
+			echo '<p>Email Address: ' . escape($data->email) . '</p>';
+		}*/
+		
+		echo '<p>Joined: ' . escape($data->registration_date) . '</p>';
+		
+		echo '<p>Posts: ' . $database->action('SELECT COUNT(id) AS num', 'Post', array('user_id', '=', $data->id))->first()->num . '</p>';
+		
+		echo '<p>Comments: ' . $database->action('SELECT COUNT(id) AS num', 'Comments', array('user_id', '=', $data->id))->first()->num . '</p>';
+		
+		/*if($data->about && $data->about_visible) {
+			echo '<hr /><p>' . escape($data->about) . '</p>';
+		}*/
+		
+		echo '<hr /><p><h3>Posts:</h3></p>';
+		$posts = $database->get('Post', array('user_id', '=', $data->id))->results();
+		if(!count($posts)) {
+			echo '<p><em>No posts yet.</em></p>';
+		} else {
+			foreach($posts as $post) {
+				$date = new DateTime($post->post_date);
+				$date = $date->format('F d, Y \a\t h:ia');
+				echo "<p><h4><a href='post.php?id=" . $post->id . "'>" . $post->title . "</a></h4><br /><em style='font-size: 12px;'>". $date ."</em></p>";
+			}
+		}
+		?>
+	</div>
+	<div class="rcol">
+		<?php
+		require_once 'includes/searchbar.php';
+		if($viewer->isLoggedIn() && $owned) {
+			?>
+			<p><a href="update.php">Edit Profile</a></p>
+			<p><a href="changepassword.php">Change Password</a></p>
+			<?php
+		}
+		?>
+	</div>
+</div>
+</body>
+</html>

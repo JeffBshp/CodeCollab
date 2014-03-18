@@ -15,6 +15,12 @@ require_once 'core/init.php';
 		echo '<input type="radio" name="order" value="score" checked />Score';
 		echo '<input type="radio" name="order" value="date" />Date';
 	}
+	
+	if($viewer->isLoggedIn()) {
+		?>
+		<hr /><p><a href="createpost.php">Create a new post</a></p>
+		<?php
+	}
 	?>
 	
 </form>
