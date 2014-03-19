@@ -95,30 +95,25 @@ if($user->isLoggedIn()) {
 		}
 		?>
 		
+		<h3>Register</h3><br /><br />
 		<form action="" method="post">
 			<div class="field">
-				<label for="username">Username</label>
-				<input type="text" name="username" id="username" value="<?php echo escape(Input::get('username')); ?>" autocomplete="off">
+				<input type="text" name="username" id="username" placeholder="Username" value="<?php echo escape(Input::get('username')); ?>" autocomplete="off">
 			</div>
 			<div class="field">
-				<label for="first_name">First Name</label>
-				<input type="text" name="first_name" id="first_name" value="<?php echo escape(Input::get('first_name')); ?>" autocomplete="off">
+				<input type="text" name="first_name" id="first_name" placeholder="First Name" value="<?php echo escape(Input::get('first_name')); ?>" autocomplete="off">
 			</div>
 			<div class="field">
-				<label for="last_name">Last Name</label>
-				<input type="text" name="last_name" id="last_name" value="<?php echo escape(Input::get('last_name')); ?>" autocomplete="off">
+				<input type="text" name="last_name" id="last_name" placeholder="Last Name" value="<?php echo escape(Input::get('last_name')); ?>" autocomplete="off">
 			</div>
 			<div class="field">
-				<label for="email">Email Address</label>
-				<input type="text" name="email" id="email" value="<?php echo escape(Input::get('email')); ?>" autocomplete="off">
+				<input type="text" name="email" id="email" placeholder="Email" value="<?php echo escape(Input::get('email')); ?>" autocomplete="off">
 			</div>
 			<div class="field">
-				<label for="password">Password</label>
-				<input type="password" name="password" id="password">
+				<input type="password" name="password" id="password" placeholder="Password">
 			</div>
 			<div class="field">
-				<label for="repeat_password">Repeat Password</label>
-				<input type="password" name="repeat_password" id="repeat_password">
+				<input type="password" name="repeat_password" id="repeat_password" placeholder="Repeat Password">
 			</div>
 			<input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
 			<input type="submit" value="Register">

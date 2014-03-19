@@ -45,22 +45,20 @@ if($user->isLoggedIn()) {
 					
 				} else {
 					foreach($validation->errors() as $error) {
-						echo $error, '<br>';
+						echo '<span class="error">' . $error . '</span><br />';
 					}
 					echo '<br>';
 				}
 			}
 		}
 		?>
-		
+		<h3>Log in</h3><br /><br />
 		<form action="" method="post">
 			<div class="field">
-				<label for="username">Username</label>
-				<input type="text" name="username" id="username" autocomplete="off">
+				<input type="text" name="username" id="username" placeholder="Username" autocomplete="off">
 			</div>
 			<div class="field">
-				<label for="password">Password</label>
-				<input type="password" name="password" id="password" autocomplete="off">
+				<input type="password" name="password" id="password" placeholder="Password" autocomplete="off">
 			</div>
 			<input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
 			<input type="submit" value="Log In">

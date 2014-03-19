@@ -74,29 +74,31 @@ if(!$user->isLoggedIn()) {
 		}
 		?>
 		
-		<form action="" method="post">
+		<form class="postform" action="" method="post">
 			<div class="field">
-				<label for="title">Title</label>
-				<input type="text" name="title" value="<?php echo escape(Input::get('title')) ?>">
+				<input type="text" placeholder="Title" name="title" value="<?php echo escape(Input::get('title')) ?>">
 			</div>
 			<div class="field">
-				<label for="tags">Tags</label>
-				<input type="text" name="tags" value="<?php echo escape(Input::get('tags')) ?>">
+				<input type="text" placeholder="Tags" name="tags" value="<?php echo escape(Input::get('tags')) ?>">
 			</div>
 			<div class="field">
-				<label for="language">Language</label>
 					<select name="language">
-						<option selected value="0">None</option>
+						<option value="" disabled selected>Language</option>
+						<option value="0">None</option>
 						<?php
 						foreach($database->get('Languages', array())->results() as $language) {
-							echo "<option value=\"{$language->id}\">{$language->language_name}</option>";
+							if($language->id == Input::get('language')) {
+								echo "<option selected value=\"{$language->id}\">{$language->language_name}</option>";
+							} else {
+								echo "<option value=\"{$language->id}\">{$language->language_name}</option>";
+							}
+							
 						}
 						?>
 					</select>
 			</div>
 			<div class="field">
-				<label for="content">Content</label><br>
-				<textarea name="content" cols="60" rows="20"><?php echo escape(Input::get('content')) ?></textarea>
+				<textarea placeholder="Content" name="content" cols="60" rows="20"><?php echo escape(Input::get('content')) ?></textarea>
 			</div>
 			<input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
 			<input type="submit" value="Submit">

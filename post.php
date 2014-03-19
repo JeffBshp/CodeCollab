@@ -146,13 +146,13 @@ $author = $post->getAuthor();
 				}
 			}
 		?>
-		<form action="" method="post">
+		<form class="postform" action="" method="post">
 			<div class="field">
 				<label for="comment">Leave a comment:</label><br>
-				<textarea name="comment" cols="40" rows="5"><?php echo escape(Input::get('comment')) ?></textarea>
+				<textarea style="font-family: 'Open Sans', sans-serif;" name="comment" cols="40" rows="5"><?php echo escape(Input::get('comment')) ?></textarea>
 			</div>
 			<input type="hidden" name="comment_token" value="<?php echo Token::generate('token_name_2'); ?>">
-			<input type="submit" value="Submit">
+			<input type="submit" value="Submit"><br /> 
 		</form>
 		<hr />
 		<?php
