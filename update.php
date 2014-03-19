@@ -22,7 +22,7 @@ if(!$user->isLoggedIn()) {
 <?php require_once 'includes/navigation.php'; ?>
 <div id="content" class="clearfix">
 	<div class="lcol">
-		<p><a href="profile.php?user=<?php echo $user->data()->username ?>">Back</a></p><hr />
+		<p><a href="profile.php?user=<?php echo $user->getUsername() ?>">Back</a></p><hr />
 		
 		<?php
 		if(Input::exists()) {
@@ -56,7 +56,7 @@ if(!$user->isLoggedIn()) {
 						));
 						
 						Session::flash('home', 'Your information has been updated.');
-						Redirect::to('profile.php?user=' . $user->data()->username);
+						Redirect::to('profile.php?user=' . $user->getUsername());
 						
 					} catch(Exception $e) {
 						die($e->getMessage());
@@ -74,39 +74,39 @@ if(!$user->isLoggedIn()) {
 		<form action="" method="post">
 			<div class="field">
 				<label for="first_name">First Name</label>
-				<input type="text" name="first_name" value="<?php echo escape($user->data()->first_name) ?>">
+				<input type="text" name="first_name" value="<?php echo $user->getFirstName() ?>">
 			</div>
 			<div class="field">
 				<label for="last_name">Last Name</label>
-				<input type="text" name="last_name" value="<?php echo escape($user->data()->last_name) ?>">
+				<input type="text" name="last_name" value="<?php echo $user->getLastName() ?>">
 			</div>
 			<div class="field">
 				<label for="email">Email Address</label>
-				<input type="text" name="email" value="<?php echo escape($user->data()->email) ?>">
+				<input type="text" name="email" value="<?php echo $user->getEmail() ?>">
 			</div>
 			<div class="field">
 				<label for="name_visible">
-					<input type="checkbox" name="name_visible"<?php echo ($user->data()->name_visible ? ' checked="1"' : '') ?>>Name Visible
+					<input type="checkbox" name="name_visible"<?php echo ($user->getVisible()['name'] ? ' checked="1"' : '') ?>>Name Visible
 				</label>
 			</div>
 			<div class="field">
 				<label for="email_visible">
-					<input type="checkbox" name="email_visible"<?php echo ($user->data()->email_visible ? ' checked="1"' : '') ?>>Email Visible
+					<input type="checkbox" name="email_visible"<?php echo ($user->getVisible()['email'] ? ' checked="1"' : '') ?>>Email Visible
 				</label>
 			</div>
 			<div class="field">
 				<label for="about_visible">
-					<input type="checkbox" name="about_visible"<?php echo ($user->data()->about_visible ? ' checked="1"' : '') ?>>About Visible
+					<input type="checkbox" name="about_visible"<?php echo ($user->getVisible()['about'] ? ' checked="1"' : '') ?>>About Visible
 				</label>
 			</div>
 			<div class="field">
 				<label for="posts_visible">
-					<input type="checkbox" name="posts_visible"<?php echo ($user->data()->posts_visible ? ' checked="1"' : '') ?>>Posts Visible
+					<input type="checkbox" name="posts_visible"<?php echo ($user->getVisible()['posts'] ? ' checked="1"' : '') ?>>Posts Visible
 				</label>
 			</div>
 			<div class="field">
 				<label for="about">About</label><br>
-				<textarea name="about" cols="40" rows="10"><?php echo (Input::get('about') ? escape(Input::get('about')) : escape($user->data()->about)) ?></textarea>
+				<textarea name="about" cols="40" rows="10"><?php echo (Input::get('about') ? escape(Input::get('about')) : $user->getAbout()); ?></textarea>
 			</div>
 			<input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
 			<input type="submit" value="Update">

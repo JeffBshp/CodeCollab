@@ -6,23 +6,21 @@ if(!$id = Input::get('id')) {
 }
 
 $database = Database::getInstance();
-$viewer = new User();
+$user = new User();
 $post = new Post($id);
 $promoted = false;
 
-if($post->exists()) {
-	$data = $post->data();
-} else {
+if(!$post->exists()) {
 	Session::flash('home', 'Page does not exist.');
 	Redirect::to('index.php');
 }
 
-$user = new User($data->user_id);
+$author = $post->getAuthor();
 ?>
 
 <!DOCTYPE html>
 <head>
-	<title>Post Page: <?php echo $data->title ?></title>
+	<title>Post Page: <?php echo $post->getTitle() ?></title>
 	<meta charset="utf-8">
 	<link rel="stylesheep" type="text/css" media="all" href="css/normalize.css" />
 	<link rel="stylesheet" type="text/css" media="all" href="css/styles.css" />
@@ -33,18 +31,22 @@ $user = new User($data->user_id);
 <?php require_once 'includes/navigation.php'; ?>
 <div id="content" class="clearfix">
 	<div class="lcol">
-	<h1><?php echo $data->title ?></h1>
+	<h1><?php echo $post->getTitle() ?></h1>
 	<p><em>
-		<a href="profile.php?user=<?php echo $user->data()->username; ?>"><?php echo $user->data()->username; ?></a><br>
-		<?php echo escape($data->post_date) ?>
+		By <a href="profile.php?user=<?php echo $author->getUsername(); ?>"><?php echo $author->getUsername(); ?></a><br>
+		<?php
+		$date = new DateTime($post->getPostDate());
+		$date = $date->format('F d, Y \a\t h:ia');
+		echo '<em style="font-size: 12px;">' . $date . '</em>';
+		?>
 	</em></p>
 	
 	Score: 
 	<?php
-	echo $database->action('SELECT COUNT(id) AS num', 'Promotion', array('post_id', '=', $data->id))->first()->num;
-	if($viewer->isLoggedIn()) {
-		foreach($database->get('Promotion', array('user_id', '=', $viewer->data()->id))->results() as $promotion) {
-			if($promotion->post_id === $data->id) {
+	echo $database->action('SELECT COUNT(id) AS num', 'Promotion', array('post_id', '=', $post->getId()))->first()->num;
+	if($user->isLoggedIn()) {
+		foreach($database->get('Promotion', array('user_id', '=', $user->getId()))->results() as $promotion) {
+			if($promotion->post_id === $post->getId()) {
 				$promoted = true;
 			}
 		}
@@ -55,25 +57,25 @@ $user = new User($data->user_id);
 				if($promoted) {
 					try {
 						$promote_id = 0;
-						foreach($database->get('Promotion', array('user_id', '=', $viewer->data()->id))->results() as $promotion) {
-							if($promotion->post_id === $data->id) {
+						foreach($database->get('Promotion', array('user_id', '=', $user->getId()))->results() as $promotion) {
+							if($promotion->post_id === $post->getId()) {
 								$promote_id = $promotion->id;
 							}
 						}
 						$database->delete('Promotion', array('id', '=', $promote_id));
-						Redirect::to('post.php?id=' . $data->id);
+						Redirect::to('post.php?id=' . $post->getId());
 					} catch(Exception $e) {
 						die($e->getMessage());
 					}
 				} else {
 					try {
 						$database->insert('Promotion', array(
-							'post_id' => $data->id,
-							'user_id' => $viewer->data()->id,
+							'post_id' => $post->getId(),
+							'user_id' => $user->getId(),
 							'promotion_date' => date('Y-m-d H:i:s')
 						));
 						
-						Redirect::to('post.php?id=' . $data->id);
+						Redirect::to('post.php?id=' . $post->getId());
 					} catch(Exception $e) {
 						die($e->getMessage());
 					}
@@ -86,7 +88,7 @@ $user = new User($data->user_id);
 				<input type='hidden' name='promote_token' value='". Token::generate('token_name_1') ."'>
 				<input type='submit' value='Undo Promotion'>
 				</form>";
-		} else if($viewer->data()->id !== $data->user_id) {
+		} else if($user->getId() !== $author->getId()) {
 			echo "<form action='' method='post'>
 				<input type='hidden' name='promote_token' value='". Token::generate('token_name_1') ."'>
 				<input type='submit' value='Promote'>
@@ -99,7 +101,7 @@ $user = new User($data->user_id);
 	<hr />
 		<?php
 		use \Michelf\Markdown;
-		echo Markdown::defaultTransform($data->content);
+		echo Markdown::defaultTransform($post->getContent());
 		?>
 	</div>
 	
@@ -110,7 +112,7 @@ $user = new User($data->user_id);
 	<div class="lcol" style="background: #F4F4F4; border-top: 1px solid #DDDDDD;">
 	
 		<?php
-		if($viewer->isLoggedIn()) {
+		if($user->isLoggedIn()) {
 			if(Input::exists()) {
 				if(Token::check(Input::get('comment_token'), 'token_name_2')) {
 					$validate = new Validate();
@@ -124,13 +126,13 @@ $user = new User($data->user_id);
 						$comment = new Comment();
 						try {
 							$comment->create(array(
-								'post_id' => $data->id,
-								'user_id' => $viewer->data()->id,
+								'post_id' => $post->getId(),
+								'user_id' => $user->getId(),
 								'content' => Input::get('comment'),
 								'comment_date' => date('Y-m-d H:i:s')
 							));
 							
-							Redirect::to('post.php?id=' . $data->id);
+							Redirect::to('post.php?id=' . $post->getId());
 							
 						} catch(Exception $e) {
 							die($e->getMessage());
@@ -155,13 +157,14 @@ $user = new User($data->user_id);
 		<hr />
 		<?php
 		}
-		foreach($database->get('Comments', array('post_id', '=', $data->id))->results() as $comment) {
+		foreach($database->get('Comments', array('post_id', '=', $post->getId()))->results() as $comment) {
 			$comment = new Comment($comment->id);
-			$commenter = new User($comment->data()->user_id);
-			echo "<a href=\"profile.php?user={$commenter->data()->username}\">{$commenter->data()->username}</a><br>";
-			echo "<span style=\"font-style: italic; font-size: 12px;\">{$comment->data()->comment_date}</span>";
-			echo "<p>{$comment->data()->content}</p>
-					<hr />";
+			$date = new DateTime($comment->getCommentDate());
+			$date = $date->format('F d, Y \a\t h:ia');
+			echo '<a href="profile.php?user=' . $comment->getCommenter()->getUsername() . '">' . $comment->getCommenter()->getUsername() . '</a><br>';
+			echo '<em style="font-size: 12px;">' . $date . '</em>';
+			echo '<p>' . $comment->getContent() . '</p>
+					<hr />';
 		}
 		?>
 	</div>

@@ -37,7 +37,7 @@ class SearchResult {
 		return $results;
 	}
 
-	private function formatResult($result) {
+	private static function formatResult($result) {
 		$data = Database::getInstance();
 
 		$data->query('SELECT id, username FROM User WHERE id = ?', array($result->user_id));
@@ -45,8 +45,10 @@ class SearchResult {
 		$username = $data->first()->username;
 
 		$title = '<h3><a href="./post.php?id=' . $result->id . '">' . $result->title . '</a></h3> <b style="margin-left: 10px;">'. $result->promotions .'</b><br />';
+		$date = new DateTime($result->post_date);
+		$date = '<em style="font-size: 12px;">' . $date->format('F d, Y \a\t h:ia') . '</em><br />';
 		$author = '<em>Author: <a href="./profile.php?user='. $userid .'">'. $username .'</a></em><br /><hr />';
-		return $title . $author;
+		return $title . $date . $author;
 	}
 }
 ?>

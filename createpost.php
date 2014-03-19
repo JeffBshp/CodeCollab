@@ -50,7 +50,7 @@ if(!$user->isLoggedIn()) {
 					}
 					try {
 						$post->create(array(
-							'user_id' => $user->data()->id,
+							'user_id' => $user->getId(),
 							'title' => Input::get('title'),
 							'language_id' => $language,
 							'tags' => Input::get('tags'),

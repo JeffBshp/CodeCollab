@@ -22,7 +22,7 @@ if(!$user->isLoggedIn()) {
 <?php require_once 'includes/navigation.php'; ?>
 <div id="content" class="clearfix">
 	<div class="lcol">
-		<p><a href="profile.php?user=<?php echo $user->data()->username ?>">Back</a></p><hr />
+		<p><a href="profile.php?user=<?php echo $user->getUsername() ?>">Back</a></p><hr />
 
 		<?php
 		if(Input::exists()) {
@@ -44,7 +44,7 @@ if(!$user->isLoggedIn()) {
 				));
 				
 				if($validation->passed()) {
-					if($user->data()->pass_hash === Hash::make(Input::get('current_password'), $user->data()->salt)) {
+					if($user->checkPassword(Input::get('current_password'))) {
 						
 						$salt = Hash::salt(32);
 						
@@ -55,7 +55,7 @@ if(!$user->isLoggedIn()) {
 							));
 							
 							Session::flash('home', 'Your password has been changed.');
-							Redirect::to('profile.php?user=' . $user->data()->username);
+							Redirect::to('profile.php?user=' . $user->getUsername());
 							
 						} catch(Exception $e) {
 							die($e->getMessage());

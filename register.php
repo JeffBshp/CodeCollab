@@ -63,7 +63,7 @@ if($user->isLoggedIn()) {
 					$salt = Hash::salt(32);
 					
 					try {
-						$user->create(array(
+						$user->register(array(
 							'username' => Input::get('username'),
 							'first_name' => Input::get('first_name'),
 							'last_name' => Input::get('last_name'),

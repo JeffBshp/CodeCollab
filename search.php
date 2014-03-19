@@ -1,14 +1,10 @@
 <?php
 require_once 'core/init.php';
-
-if(Session::exists('home')) {
-	echo '<p>' . Session::flash('home') . '</p>';
-}
 ?>
 
 <!DOCTYPE html>
 <head>
-	<title>CodeCollab</title>
+	<title>CodeCollab: Search Results</title>
 	<meta charset="utf-8">
 	<link rel="stylesheep" type="text/css" media="all" href="css/normalize.css" />
 	<link rel="stylesheet" type="text/css" media="all" href="css/styles.css" />
@@ -19,9 +15,9 @@ if(Session::exists('home')) {
 <?php require_once 'includes/navigation.php'; ?>
 <div id="content" class="clearfix"  style="min-height: 594px; background: white;">
 	<div class="lcol" style="border: white;">
-		<?php require_once 'includes/searchbar.php'; ?>
-
 		<?php
+		require_once 'includes/searchbar.php';
+		
 		if(Input::exists('get')) {
 			$validate = new Validate();
 			$validation = $validate->check($_GET, array(

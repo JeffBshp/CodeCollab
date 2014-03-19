@@ -1,8 +1,12 @@
 <?php
 class Comment {
 	private $_database,
-			$_data,
-			$_exists;
+			$_exists,
+			$_id,
+			$_postId,
+			$_commenter,
+			$_commentDate,
+			$_content;
 	
 	public function __construct($id = null) {
 		$this->_database = Database::getInstance();
@@ -11,8 +15,13 @@ class Comment {
 			$data = $this->_database->get('Comments', array('id', '=', $id));
 			
 			if($data->count()) {
-				$this->_data = $data->first();
 				$this->_exists = true;
+				$data = $data->first();
+				$this->_id = $data->id;
+				$this->_postId = $data->post_id;
+				$this->_commenter = new User($data->user_id);
+				$this->_commentDate = $data->comment_date;
+				$this->_content = $data->content;
 			}
 		}
 	}
@@ -30,12 +39,28 @@ class Comment {
 		}
 	}
 	
-	public function data() {
-		return $this->_data;
-	}
-	
 	public function exists() {
 		return $this->_exists;
+	}
+	
+	public function getId() {
+		return $this->_id;
+	}
+	
+	public function getPostId() {
+		return $this->_postId;
+	}
+	
+	public function getCommenter() {
+		return $this->_commenter;
+	}
+	
+	public function getCommentDate() {
+		return $this->_commentDate;
+	}
+	
+	public function getContent() {
+		return $this->_content;
 	}
 }
 ?>
