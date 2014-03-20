@@ -1,5 +1,26 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
 
+.prettyprint ol.linenums > li { list-style-type: decimal; }
+
+pre.prettyprint {
+	font-size: 14px;
+	background: #333333 !important;
+	-webkit-border-radius: 0px !important;
+	border-radius: 0px !important;
+}
+
+code {
+	background: #EFEFEF;
+	border: 1px solid #DDDDDD;
+	margin-left: 5px;
+	margin-right: 5px;
+	padding: 2px 5px 2px 5px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	font-size: 14px;
+	line-height: 14px;
+}
+
 html {
 	-webkit-font-smoothing: antialiased;
 }
@@ -112,7 +133,7 @@ input[type=radio] {
 
 input[type=submit] {
 	margin: 0;
-	padding: 0;
+	padding: 5px;
 	float: right;	
 	cursor: pointer;
 	font-weight: bold;
@@ -291,4 +312,77 @@ p {
 .postform {
 	max-width: 100% !important;
 	width: 100% !important;
+}
+
+.post {
+	padding: 10px;
+	margin: 0;
+	min-height: 50px;
+}
+
+.post .info {
+	width: 673px;
+	height: auto !important;
+	float: right;
+}
+
+.post:hover {
+	background: #EEEEEE;
+}
+
+.post .info .title a {
+	margin: 0;
+	text-decoration: none;
+	font-weight: bold;
+	border-bottom: 1px dotted #CCCCCC;
+	font-size: 20px;
+}
+
+.post .info .title a:hover {
+	background: none;
+	border: none;
+}
+
+.post .info .title a:visited {
+	color: #999999;
+}
+
+.post .score {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	float: left;
+	text-align: center;
+	width: 70px;
+	line-height: 30px;
+	margin: 0;
+	padding: 0;
+	min-height: 50px;
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.post .info .author:before {
+	line-height: 14px;
+	font-size: 14px;
+	content: "By";
+	margin-right: 5px;
+}
+
+.post .info .author a {
+	margin: 0;
+	padding: 0;
+	line-height: 14px;
+	font-style: italic;
+	font-size: 14px;
+}
+
+.post .info .date {
+	margin: 0;
+	padding: 0;
+	margin-right: 10px;
+	font-style: italic;	
+	font-size: 14px;
 }

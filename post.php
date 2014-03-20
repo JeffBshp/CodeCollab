@@ -24,6 +24,7 @@ $author = $post->getAuthor();
 	<meta charset="utf-8">
 	<link rel="stylesheep" type="text/css" media="all" href="css/normalize.css" />
 	<link rel="stylesheet" type="text/css" media="all" href="css/styles.css" />
+	<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=sunburst"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 
@@ -86,18 +87,18 @@ $author = $post->getAuthor();
 		if($promoted) {
 			echo "<form action='' method='post'>
 				<input type='hidden' name='promote_token' value='". Token::generate('token_name_1') ."'>
-				<input type='submit' value='Undo Promotion'>
+				<input style='float: left;' type='submit' value='Undo Promotion'>
 				</form>";
 		} else if($user->getId() !== $author->getId()) {
 			echo "<form action='' method='post'>
 				<input type='hidden' name='promote_token' value='". Token::generate('token_name_1') ."'>
-				<input type='submit' value='Promote'>
+				<input style='float: left;' type='submit' value='Promote'>
 				</form>";
 		}
 	}
 	
 	?>
-	
+	<br />
 	<hr />
 		<?php
 		use \Michelf\Markdown;
