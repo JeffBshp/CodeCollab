@@ -106,7 +106,7 @@ $author = $post->getAuthor();
 	</div>
 	
 	<div class="rcol">
-		<?php require_once 'includes/searchbar.php'; ?>
+		<?php require_once 'includes/sidebar.php'; ?>
 	</div>
 
 	<div class="lcol" style="background: #F4F4F4; border-top: 1px solid #DDDDDD;">

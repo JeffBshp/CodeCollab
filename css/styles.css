@@ -259,12 +259,14 @@ p {
 }
 
 #content {
+	min-height: 300px;
 	margin: 50px auto 0px auto;
 	width: 1164px;
 	background: #EEEEEE;
 }
 
 .lcol {
+	min-height: 300px;
 	width: 763px;
 	border-right: 1px solid #DDDDDD;
 	padding: 10px;
@@ -273,6 +275,7 @@ p {
 }
 
 .rcol {
+	min-height: 300px;
 	width: 360px;
 	padding: 10px;
 	float: right;

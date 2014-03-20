@@ -3,11 +3,11 @@ require_once 'core/init.php';
 
 $database = Database::getInstance();
 
-if(!$user = Input::get('user')) {
+if(!$userProfile = Input::get('user')) {
 	Redirect::to('index.php');
 }
-$user = new User($user);
-if(!$user->exists()) {
+$userProfile = new User($userProfile);
+if(!$userProfile->exists()) {
 	Session::flash('home', 'Page does not exist.');
 	Redirect::to('index.php');
 }
@@ -17,16 +17,16 @@ $followed = false;
 $owned = false;
 $viewer = new User();
 if($viewer->isLoggedIn()) {
-	if($viewer->getId() === $user->getId()) {
+	if($viewer->getId() === $userProfile->getId()) {
 		$owned = true;
 	}/* else {
-		foreach($database->get('Follow', array('follower_id', '=', $user->getId()))->results() as $follow) {
+		foreach($database->get('Follow', array('follower_id', '=', $userProfile->getId()))->results() as $follow) {
 			if($follow->followee_id === $viewer->getId()) {
 				$follows = true;
 			}
 		}
 		foreach($database->get('Follow', array('follower_id', '=', $viewer->getId()))->results() as $follow) {
-			if($follow->followee_id === $user->getId()) {
+			if($follow->followee_id === $userProfile->getId()) {
 				$followed = true;
 			}
 		}
@@ -38,13 +38,13 @@ if($viewer->isLoggedIn()) {
 		if($followed) {
 			try {
 				$follow_id = 0;
-				foreach($database->get('Follow', array('followee_id', '=', $user->getId()))->results() as $follower) {
+				foreach($database->get('Follow', array('followee_id', '=', $userProfile->getId()))->results() as $follower) {
 					if($follower->follower_id === $viewer->getId()) {
 						$follow_id = $follower->id;
 					}
 				}
 				$database->delete('Follow', array('id', '=', $follow_id));
-				Redirect::to('profile.php?user=' . $user->getUsername());
+				Redirect::to('profile.php?user=' . $userProfile->getUsername());
 			} catch(Exception $e) {
 				die($e->getMessage());
 			}
@@ -52,10 +52,10 @@ if($viewer->isLoggedIn()) {
 			try {
 				$database->insert('Follow', array(
 					'follower_id' => $viewer->getId(),
-					'followee_id' => $user->getId(),
+					'followee_id' => $userProfile->getId(),
 					'follow_date' => date('Y-m-d H:i:s')
 				));
-				Redirect::to('profile.php?user=' . $user->getUsername());
+				Redirect::to('profile.php?user=' . $userProfile->getUsername());
 			} catch(Exception $e) {
 				die($e->getMessage());
 			}
@@ -66,7 +66,7 @@ if($viewer->isLoggedIn()) {
 
 <!DOCTYPE html>
 <head>
-	<title>CodeCollab User: <?php echo $user->getUsername() ?></title>
+	<title>CodeCollab User: <?php echo $userProfile->getUsername() ?></title>
 	<meta charset="utf-8">
 	<link rel="stylesheep" type="text/css" media="all" href="css/normalize.css" />
 	<link rel="stylesheet" type="text/css" media="all" href="css/styles.css" />
@@ -79,11 +79,11 @@ if($viewer->isLoggedIn()) {
 	<div class="lcol">
 
 		<?php
-		echo '<p><h3>' . $user->getUsername() . '</h3></p><hr />';
+		echo '<p><h3>'. $userProfile->getUsername() .'</h3></p>';
 		
 		/*if($viewer->isLoggedIn()) {
 			if($follows) {
-				echo "<p>{$user->getUsername()} follows you.</p>";
+				echo "<p>{$userProfile->getUsername()} follows you.</p>";
 			}
 			if($followed) {
 				echo "<form action='' method='post'>
@@ -98,28 +98,28 @@ if($viewer->isLoggedIn()) {
 			}
 		}
 		
-		if($user->getVisible()->name) {
-			echo '<p>Full Name: ' . escape($user->getFullName()) . '</p>';
+		if($userProfile->getVisible()->name) {
+			echo '<p>Full Name: ' . escape($userProfile->getFullName()) . '</p>';
 		}
 		
-		if($user->getVisible()->email) {
-			echo '<p>Email Address: ' . $user->getEmail() . '</p>';
+		if($userProfile->getVisible()->email) {
+			echo '<p>Email Address: ' . $userProfile->getEmail() . '</p>';
 		}*/
 		
-		$date = new DateTime($user->getRegistrationDate());
+		$date = new DateTime($userProfile->getRegistrationDate());
 		$date = $date->format('F d, Y \a\t h:ia');
 		echo '<p>Joined: ' . escape($date) . '</p>';
 		
-		echo '<p>Posts: ' . $database->action('SELECT COUNT(id) AS num', 'Post', array('user_id', '=', $user->getId()))->first()->num . '</p>';
+		echo '<p>Posts: ' . $database->action('SELECT COUNT(id) AS num', 'Post', array('user_id', '=', $userProfile->getId()))->first()->num . '</p>';
 		
-		echo '<p>Comments: ' . $database->action('SELECT COUNT(id) AS num', 'Comments', array('user_id', '=', $user->getId()))->first()->num . '</p>';
+		echo '<p>Comments: ' . $database->action('SELECT COUNT(id) AS num', 'Comments', array('user_id', '=', $userProfile->getId()))->first()->num . '</p>';
 		
-		/*if($user->getAbout() && $user->getVisible()->about) {
-			echo '<hr /><p>' . $user->getAbout() . '</p>';
+		/*if($userProfile->getAbout() && $userProfile->getVisible()->about) {
+			echo '<hr /><p>' . $userProfile->getAbout() . '</p>';
 		}*/
 		
 		echo '<hr /><p><h3>Posts:</h3></p>';
-		$posts = $database->get('Post', array('user_id', '=', $user->getId()))->results();
+		$posts = $database->get('Post', array('user_id', '=', $userProfile->getId()))->results();
 		if(!count($posts)) {
 			echo '<p><em>No posts yet.</em></p>';
 		} else {
@@ -133,7 +133,7 @@ if($viewer->isLoggedIn()) {
 	</div>
 	<div class="rcol">
 		<?php
-		require_once 'includes/searchbar.php';
+		require_once 'includes/sidebar.php';
 		if($viewer->isLoggedIn() && $owned) {
 			?>
 			<p><a href="update.php">Edit Profile</a></p>

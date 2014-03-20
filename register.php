@@ -120,7 +120,7 @@ if($user->isLoggedIn()) {
 		</form>
 	</div>
 	<div class="rcol">
-		<?php require_once 'includes/searchbar.php'; ?>
+		<?php require_once 'includes/sidebar.php'; ?>
 	</div>
 </div>
 </body>

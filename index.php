@@ -34,7 +34,7 @@ require_once 'core/init.php';
 		?>
 	</div>
 	<div class="rcol">
-		<?php require_once 'includes/searchbar.php'; ?>
+		<?php require_once 'includes/sidebar.php'; ?>
 	</div>
 </div>
 </body>
