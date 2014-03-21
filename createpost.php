@@ -85,7 +85,6 @@ if(!$user->isLoggedIn()) {
 			<div class="field">
 					<select name="language">
 						<option value="" disabled selected>Language</option>
-						<option value="1">None</option>
 						<?php
 						foreach($database->get('Languages', array())->results() as $language) {
 							if($language->id == Input::get('language')) {
