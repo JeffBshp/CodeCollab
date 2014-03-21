@@ -44,10 +44,11 @@ if(!$user->isLoggedIn()) {
 				
 				if($validation->passed()) {
 					$post = new Post();
-					$language = null;
-					if(Input::get('language') !== '0') {
+					$language = '1';
+					if(Input::get('language') !== '') {
 						$language = Input::get('language');
 					}
+					
 					try {
 						$post->create(array(
 							'user_id' => $user->getId(),
@@ -84,7 +85,7 @@ if(!$user->isLoggedIn()) {
 			<div class="field">
 					<select name="language">
 						<option value="" disabled selected>Language</option>
-						<option value="0">None</option>
+						<option value="1">None</option>
 						<?php
 						foreach($database->get('Languages', array())->results() as $language) {
 							if($language->id == Input::get('language')) {

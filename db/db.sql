@@ -37,15 +37,15 @@ CREATE TABLE Languages
 );
 
 INSERT INTO Languages (language_name) VALUES
-	('C'), ('C++'), ('Java'), ('Javascript'),
+	('None'), ('C'), ('C++'), ('Java'), ('Javascript'),
 	('SQL'), ('PHP'), ('HTML'), ('Actionscript');
 
 CREATE TABLE Post
 (
 	id					INT NOT NULL AUTO_INCREMENT,
 	user_id				INT NOT NULL,
-	title				VARCHAR(255),
-	language_id			INT,
+	title				VARCHAR(255) NOT NULL,
+	language_id			INT NOT NULL DEFAULT '1',
 	tags				TEXT,
 	content				TEXT NOT NULL,
 	post_date			DATETIME NOT NULL,
