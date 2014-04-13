@@ -45,6 +45,12 @@ class Validate {
 								$this->addError("{$item} may not be a number and may not start with a number");
 							}
 						break;
+						case 'empty':
+							/* this is an attempt to somewhat stop bots */
+							if(isset($value) || strlen(trim($value)) != 0) {
+								$this->addError("{$item} should not have been filled out");
+							}
+						break;
 						default:
 						break;
 					}

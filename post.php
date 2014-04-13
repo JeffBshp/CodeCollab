@@ -19,6 +19,7 @@ $author = $post->getAuthor();
 ?>
 
 <!DOCTYPE html>
+<html>
 <head>
 	<title>Post Page: <?php echo $post->getTitle() ?></title>
 	<meta charset="utf-8">
@@ -33,18 +34,24 @@ $author = $post->getAuthor();
 <div id="content" class="clearfix">
 	<div class="lcol">
 	<h1><?php echo $post->getTitle() ?></h1>
-	<p><em>
-		By <a href="profile.php?user=<?php echo $author->getUsername(); ?>"><?php echo $author->getUsername(); ?></a><br>
-		<?php
-		$date = new DateTime($post->getPostDate());
-		$date = $date->format('F d, Y \a\t h:ia');
-		echo '<em style="font-size: 12px;">' . $date . '</em>';
-		?>
-	</em></p>
+	<div id="author">
+		<div id="info">
+			<a href="profile.php?user=<?php echo $author->getUsername(); ?>"><?php echo $author->getUsername(); ?></a>
+		</div>
+		<div id="picture">
+			<img src="http://qmato.com/img/thumb_placeholder.png" alt="<?php echo $author->getUsername(); ?>">
+		</div>
+	</div>
+	<br />
+
 	
-	Score: 
 	<?php
-	echo $database->action('SELECT COUNT(id) AS num', 'Promotion', array('post_id', '=', $post->getId()))->first()->num;
+	//echo $database->action('SELECT COUNT(id) AS num', 'Promotion', array('post_id', '=', $post->getId()))->first()->num;
+	echo "Score: " . $post->getPromotions() . "<br />";
+
+	$date = new DateTime($post->getPostDate());
+	$date = $date->format('F d, Y \a\t h:ia');
+	echo "<em>$date</em><br /><br />";
 	if($user->isLoggedIn()) {
 		foreach($database->get('Promotion', array('user_id', '=', $user->getId()))->results() as $promotion) {
 			if($promotion->post_id === $post->getId()) {
@@ -110,7 +117,7 @@ $author = $post->getAuthor();
 		<?php require_once 'includes/sidebar.php'; ?>
 	</div>
 
-	<div class="lcol" style="background: #F4F4F4; border-top: 1px solid #DDDDDD;">
+	<div class="lcol comments" style="background: #F4F4F4; border-top: 1px solid #DDDDDD;">
 	
 		<?php
 		if($user->isLoggedIn()) {

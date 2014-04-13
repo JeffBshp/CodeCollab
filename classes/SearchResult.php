@@ -39,16 +39,20 @@ class SearchResult {
 
 	private static function formatResult($result) {
 		$data = Database::getInstance();
-
-		$data->query('SELECT id, username FROM User WHERE id = ?', array($result->user_id));
-		$userid = $data->first()->id;
+		$data->query('SELECT username FROM User WHERE id = ?', array($result->user_id));
 		$username = $data->first()->username;
-
-		$title = '<h3><a href="./post.php?id=' . $result->id . '">' . $result->title . '</a></h3> <b style="margin-left: 10px;">'. $result->promotions .'</b><br />';
 		$date = new DateTime($result->post_date);
-		$date = '<em style="font-size: 12px;">' . $date->format('F d, Y \a\t h:ia') . '</em><br />';
-		$author = '<em>Author: <a href="./profile.php?user='. $userid .'">'. $username .'</a></em><br /><hr />';
-		return $title . $date . $author;
+		$date = $date->format('F d, Y \a\t h:ia');
+
+
+		return ("<div class='post clearfix'>
+						<div class='info'>
+							<div class='score' title='Score'>" . $result->promotions . "</div>
+							<div class='title'><a href='post.php?id=" . $result->id . "'>" . $result->title . "</a></div>
+							<div class='author'><a href='profile.php?user=" . $username . "'>" . $username . "</a></div>
+							<div class='date'>". $date ."</div>
+						</div>
+					</div>");
 	}
 }
 ?>

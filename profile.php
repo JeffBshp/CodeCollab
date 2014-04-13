@@ -65,6 +65,7 @@ if($viewer->isLoggedIn()) {
 ?>
 
 <!DOCTYPE html>
+<html>
 <head>
 	<title>CodeCollab User: <?php echo $userProfile->getUsername() ?></title>
 	<meta charset="utf-8">

@@ -10,6 +10,7 @@ if(!$user->isLoggedIn()) {
 ?>
 
 <!DOCTYPE html>
+<html>
 <head>
 	<title>CodeCollab: Edit Profile</title>
 	<meta charset="utf-8">

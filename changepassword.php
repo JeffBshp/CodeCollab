@@ -10,6 +10,7 @@ if(!$user->isLoggedIn()) {
 ?>
 
 <!DOCTYPE html>
+<html>
 <head>
 	<title>CodeCollab: Change Password</title>
 	<meta charset="utf-8">

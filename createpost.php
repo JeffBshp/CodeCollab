@@ -11,6 +11,7 @@ if(!$user->isLoggedIn()) {
 ?>
 
 <!DOCTYPE html>
+<html>
 <head>
 	<title>CodeCollab: Create Post</title>
 	<meta charset="utf-8">

@@ -10,6 +10,7 @@ if($user->isLoggedIn()) {
 ?>
 
 <!DOCTYPE html>
+<html>
 <head>
 	<title>CodeCollab: Register</title>
 	<meta charset="utf-8">
@@ -44,7 +45,8 @@ if($user->isLoggedIn()) {
 					'email' => array(
 						'required' => true,
 						'min' => 2,
-						'max' => 255
+						'max' => 255,
+						'unique' => 'User'
 					),
 					'password' => array(
 						'required' => true,
@@ -56,6 +58,9 @@ if($user->isLoggedIn()) {
 						'required' => true,
 						'min' => 6,
 						'max' => 35
+					),
+					'robot' => array(
+						'empty' => true
 					)
 				));
 				
@@ -114,6 +119,10 @@ if($user->isLoggedIn()) {
 			</div>
 			<div class="field">
 				<input type="password" name="repeat_password" id="repeat_password" placeholder="Repeat Password">
+			</div>
+			<div class="field" style="display: none; position: absolute; left: -1000px; top: -1000px;">
+				If you're reading this, leave the following field blank
+				<input type="text" name="robot" id="robot" style="display: none;" placeholder="Leave this blank">
 			</div>
 			<input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
 			<input type="submit" value="Register">

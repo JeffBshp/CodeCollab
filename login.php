@@ -10,6 +10,7 @@ if($user->isLoggedIn()) {
 ?>
 
 <!DOCTYPE html>
+<html>
 <head>
 	<title>CodeCollab: Log In</title>
 	<meta charset="utf-8">
@@ -40,7 +41,7 @@ if($user->isLoggedIn()) {
 						Session::flash('home', 'You are now logged in.');
 						Redirect::to('index.php');
 					} else {
-						echo 'Login failed.<br>';
+						echo '<span class="error">Login failed</span><br />';
 					}
 					
 				} else {

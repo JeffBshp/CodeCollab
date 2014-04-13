@@ -456,7 +456,7 @@ class Markdown implements MarkdownInterface {
 				[ ]*		# Tailing spaces
 				$			# End of line.
 			}mx',
-			"\n".$this->hashBlock("<hr$this->empty_element_suffix")."\n", 
+			"\n".$this->hashBlock("<hr class='inpost'$this->empty_element_suffix")."\n", 
 			$text);
 	}
 

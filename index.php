@@ -3,6 +3,7 @@ require_once 'core/init.php';
 ?>
 
 <!DOCTYPE html>
+<html>
 <head>
 	<title>CodeCollab</title>
 	<meta charset="utf-8">
@@ -31,8 +32,8 @@ require_once 'core/init.php';
 				$date = $date->format('F d, Y \a\t h:ia');
 				echo "
 					<div class='post clearfix'>
-						<div class='score'>" . $post->promotions . "</div>
 						<div class='info'>
+							<div class='score' title='Score'>" . $post->promotions . "</div>
 							<div class='title'><a href='post.php?id=" . $post->id . "'>" . $post->title . "</a></div>
 							<div class='author'><a href='profile.php?user=" . $author->getUsername() . "'>" . $author->getUsername() . "</a></div>
 							<div class='date'>". $date ."</div>
@@ -41,7 +42,6 @@ require_once 'core/init.php';
 					";
 			}
 		?>
-		<br /><br />
 		<h1>Top Posts</h1>
 		<br />
 		<?php
@@ -61,8 +61,8 @@ require_once 'core/init.php';
 					$date = $date->format('F d, Y \a\t h:ia');
 					echo "
 					<div class='post clearfix'>
-						<div class='score'>" . $post->promotions . "</div>
 						<div class='info'>
+							<div class='score'>" . $post->promotions . "</div>
 							<div class='title'><a href='post.php?id=" . $post->id . "'>" . $post->title . "</a></div>
 							<div class='author'><a href='profile.php?user=" . $author->getUsername() . "'>" . $author->getUsername() . "</a></div>
 							<div class='date'>". $date ."</div>

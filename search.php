@@ -3,6 +3,7 @@ require_once 'core/init.php';
 ?>
 
 <!DOCTYPE html>
+<html>
 <head>
 	<title>CodeCollab: Search Results</title>
 	<meta charset="utf-8">
