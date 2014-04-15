@@ -12,13 +12,15 @@ class SearchResult {
 		if($option == "date") {
 			$data->query('SELECT Post.*, COUNT(Promotion.post_id) AS promotions
 							FROM Post LEFT JOIN Promotion ON Post.id = Promotion.post_id
-							WHERE Post.title LIKE ?
+							LEFT JOIN User ON Post.user_id = User.id
+							WHERE Post.title LIKE ? AND User.posts_visible = TRUE
 							GROUP BY Post.id
 							ORDER BY Post.post_date DESC', array('%'.$query.'%'));
 		} else {
 			$data->query('SELECT Post.*, COUNT(Promotion.post_id) AS promotions
 							FROM Post LEFT JOIN Promotion ON Post.id = Promotion.post_id
-							WHERE Post.title LIKE ?
+							LEFT JOIN User ON Post.user_id = User.id
+							WHERE Post.title LIKE ? AND User.posts_visible = TRUE
 							GROUP BY Post.id
 							ORDER BY promotions DESC', array('%'.$query.'%'));
 		}
@@ -43,8 +45,7 @@ class SearchResult {
 		$username = $data->first()->username;
 		$date = new DateTime($result->post_date);
 		$date = $date->format('F d, Y \a\t h:ia');
-
-
+		
 		return ("<div class='post clearfix'>
 						<div class='info'>
 							<div class='score' title='Score'>" . $result->promotions . "</div>

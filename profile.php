@@ -15,31 +15,31 @@ if(!$userProfile->exists()) {
 $follows = false;
 $followed = false;
 $owned = false;
-$viewer = new User();
-if($viewer->isLoggedIn()) {
-	if($viewer->getId() === $userProfile->getId()) {
+$user = new User();
+if($user->isLoggedIn()) {
+	if($user->getId() === $userProfile->getId()) {
 		$owned = true;
-	}/* else {
+	} else {
 		foreach($database->get('Follow', array('follower_id', '=', $userProfile->getId()))->results() as $follow) {
-			if($follow->followee_id === $viewer->getId()) {
+			if($follow->followee_id === $user->getId()) {
 				$follows = true;
 			}
 		}
-		foreach($database->get('Follow', array('follower_id', '=', $viewer->getId()))->results() as $follow) {
+		foreach($database->get('Follow', array('follower_id', '=', $user->getId()))->results() as $follow) {
 			if($follow->followee_id === $userProfile->getId()) {
 				$followed = true;
 			}
 		}
-	}*/
+	}
 }
 
-/*if(Input::exists()) {
+if(Input::exists()) {
 	if(Token::check(Input::get('token'))) {
 		if($followed) {
 			try {
 				$follow_id = 0;
 				foreach($database->get('Follow', array('followee_id', '=', $userProfile->getId()))->results() as $follower) {
-					if($follower->follower_id === $viewer->getId()) {
+					if($follower->follower_id === $user->getId()) {
 						$follow_id = $follower->id;
 					}
 				}
@@ -51,7 +51,7 @@ if($viewer->isLoggedIn()) {
 		} else {
 			try {
 				$database->insert('Follow', array(
-					'follower_id' => $viewer->getId(),
+					'follower_id' => $user->getId(),
 					'followee_id' => $userProfile->getId(),
 					'follow_date' => date('Y-m-d H:i:s')
 				));
@@ -61,7 +61,7 @@ if($viewer->isLoggedIn()) {
 			}
 		}
 	}
-}*/
+}
 ?>
 
 <!DOCTYPE html>
@@ -82,7 +82,7 @@ if($viewer->isLoggedIn()) {
 		<?php
 		echo '<p><h3>'. $userProfile->getUsername() .'</h3></p>';
 		
-		/*if($viewer->isLoggedIn()) {
+		if($user->isLoggedIn()) {
 			if($follows) {
 				echo "<p>{$userProfile->getUsername()} follows you.</p>";
 			}
@@ -99,13 +99,13 @@ if($viewer->isLoggedIn()) {
 			}
 		}
 		
-		if($userProfile->getVisible()->name) {
+		if($userProfile->getVisible()['name']) {
 			echo '<p>Full Name: ' . escape($userProfile->getFullName()) . '</p>';
 		}
 		
-		if($userProfile->getVisible()->email) {
+		if($userProfile->getVisible()['email']) {
 			echo '<p>Email Address: ' . $userProfile->getEmail() . '</p>';
-		}*/
+		}
 		
 		$date = new DateTime($userProfile->getRegistrationDate());
 		$date = $date->format('F d, Y \a\t h:ia');
@@ -115,19 +115,21 @@ if($viewer->isLoggedIn()) {
 		
 		echo '<p>Comments: ' . $database->action('SELECT COUNT(id) AS num', 'Comments', array('user_id', '=', $userProfile->getId()))->first()->num . '</p>';
 		
-		/*if($userProfile->getAbout() && $userProfile->getVisible()->about) {
+		if($userProfile->getAbout() && $userProfile->getVisible()['about']) {
 			echo '<hr /><p>' . $userProfile->getAbout() . '</p>';
-		}*/
+		}
 		
-		echo '<hr /><p><h3>Posts:</h3></p>';
-		$posts = $database->get('Post', array('user_id', '=', $userProfile->getId()))->results();
-		if(!count($posts)) {
-			echo '<p><em>No posts yet.</em></p>';
-		} else {
-			foreach($posts as $post) {
-				$date = new DateTime($post->post_date);
-				$date = $date->format('F d, Y \a\t h:ia');
-				echo "<p><h4><a href='post.php?id=" . $post->id . "'>" . $post->title . "</a></h4><br /><em style='font-size: 12px;'>". $date ."</em></p>";
+		if($owned || $userProfile->getVisible()['posts']) {
+			echo '<hr /><p><h3>Posts:</h3></p>';
+			$posts = $database->get('Post', array('user_id', '=', $userProfile->getId()))->results();
+			if(!count($posts)) {
+				echo '<p><em>No posts yet.</em></p>';
+			} else {
+				foreach($posts as $post) {
+					$date = new DateTime($post->post_date);
+					$date = $date->format('F d, Y \a\t h:ia');
+					echo "<p><h4><a href='post.php?id=" . $post->id . "'>" . $post->title . "</a></h4><br /><em style='font-size: 12px;'>". $date ."</em></p>";
+				}
 			}
 		}
 		?>
@@ -135,7 +137,7 @@ if($viewer->isLoggedIn()) {
 	<div class="rcol">
 		<?php
 		require_once 'includes/sidebar.php';
-		if($viewer->isLoggedIn() && $owned) {
+		if($user->isLoggedIn() && $owned) {
 			?>
 			<p><a href="update.php">Edit Profile</a></p>
 			<p><a href="changepassword.php">Change Password</a></p>
