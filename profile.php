@@ -99,11 +99,12 @@ if(Input::exists()) {
 			}
 		}
 		
-		if($userProfile->getVisible()['name']) {
+		$visibilities = $userProfile->getVisible();
+		if($visibilities['name']) {
 			echo '<p>Full Name: ' . escape($userProfile->getFullName()) . '</p>';
 		}
 		
-		if($userProfile->getVisible()['email']) {
+		if($visibilities['email']) {
 			echo '<p>Email Address: ' . $userProfile->getEmail() . '</p>';
 		}
 		
@@ -115,11 +116,11 @@ if(Input::exists()) {
 		
 		echo '<p>Comments: ' . $database->action('SELECT COUNT(id) AS num', 'Comments', array('user_id', '=', $userProfile->getId()))->first()->num . '</p>';
 		
-		if($userProfile->getAbout() && $userProfile->getVisible()['about']) {
+		if($userProfile->getAbout() && $visibilities['about']) {
 			echo '<hr /><p>' . $userProfile->getAbout() . '</p>';
 		}
 		
-		if($owned || $userProfile->getVisible()['posts']) {
+		if($owned || $visibilities['posts']) {
 			echo '<hr /><p><h3>Posts:</h3></p>';
 			$posts = $database->get('Post', array('user_id', '=', $userProfile->getId()))->results();
 			if(!count($posts)) {

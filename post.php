@@ -39,7 +39,10 @@ $author = $post->getAuthor();
 			<a href="profile.php?user=<?php echo $author->getUsername(); ?>"><?php echo $author->getUsername(); ?></a>
 		</div>
 		<div id="picture">
-			<img src="http://qmato.com/img/thumb_placeholder.png" alt="<?php echo $author->getUsername(); ?>">
+			<?php
+				$image = $author->getProfilePicture();
+			?>
+			<img src="functions/thumbnail.php?file=../images/users/<?php echo $image ?>&width=50&height=50">
 		</div>
 	</div>
 	<br />
@@ -51,7 +54,7 @@ $author = $post->getAuthor();
 
 	$date = new DateTime($post->getPostDate());
 	$date = $date->format('F d, Y \a\t h:ia');
-	echo "<em>$date</em><br /><br />";
+	echo "<em>$date</em>";
 	if($user->isLoggedIn()) {
 		foreach($database->get('Promotion', array('user_id', '=', $user->getId()))->results() as $promotion) {
 			if($promotion->post_id === $post->getId()) {
@@ -92,11 +95,13 @@ $author = $post->getAuthor();
 		}
 		
 		if($promoted) {
+			echo "<br /><br />";
 			echo "<form action='' method='post'>
 				<input type='hidden' name='promote_token' value='". Token::generate('token_name_1') ."'>
 				<input style='float: left;' type='submit' value='Undo Promotion'>
 				</form>";
 		} else if($user->getId() !== $author->getId()) {
+			echo "<br /><br />";
 			echo "<form action='' method='post'>
 				<input type='hidden' name='promote_token' value='". Token::generate('token_name_1') ."'>
 				<input style='float: left;' type='submit' value='Promote'>

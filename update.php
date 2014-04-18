@@ -24,7 +24,6 @@ if(!$user->isLoggedIn()) {
 <div id="content" class="clearfix">
 	<div class="lcol">
 		<p><a href="profile.php?user=<?php echo $user->getUsername() ?>">Back</a></p><hr />
-		
 		<?php
 		if(Input::exists()) {
 			if(Token::check(Input::get('token'))) {
@@ -44,6 +43,12 @@ if(!$user->isLoggedIn()) {
 				));
 				
 				if($validation->passed()) {
+					$newImage = $user->getProfilePicture();
+					$output = ImageUpload::upload();
+					if(!is_null($output) && $output != "error") {
+						$newImage = $output;
+					}
+
 					try {
 						$user->update(array(
 							'first_name' => Input::get('first_name'),
@@ -55,9 +60,15 @@ if(!$user->isLoggedIn()) {
 							'about_visible' => Input::get('about_visible') === 'on' ? 1 : 0,
 							'posts_visible' => Input::get('posts_visible') === 'on' ? 1 : 0
 						));
+
+						if($output != "error") {
+							$user->update(array('profile_picture' => $newImage));
+							Session::flash('home', 'Your information has been updated.');
+							Redirect::to('profile.php?user=' . $user->getUsername());
+						} else {
+							Redirect::to('update.php?e=error');
+						}
 						
-						Session::flash('home', 'Your information has been updated.');
-						Redirect::to('profile.php?user=' . $user->getUsername());
 						
 					} catch(Exception $e) {
 						die($e->getMessage());
@@ -71,8 +82,12 @@ if(!$user->isLoggedIn()) {
 			}
 		}
 		?>
+
+		<?php
+		$visibilities = $user->getVisible();
+		?>
 		
-		<form action="" method="post">
+		<form action="" method="post" enctype="multipart/form-data">
 			<div class="field">
 				<label for="first_name">First Name</label>
 				<input type="text" name="first_name" value="<?php echo $user->getFirstName() ?>">
@@ -87,30 +102,41 @@ if(!$user->isLoggedIn()) {
 			</div>
 			<div class="field">
 				<label for="name_visible">
-					<input type="checkbox" name="name_visible"<?php echo ($user->getVisible()['name'] ? ' checked="1"' : '') ?>>Name Visible
+					<input type="checkbox" name="name_visible"<?php echo ($visibilities['name'] ? ' checked="1"' : '') ?>>Name Visible
 				</label>
 			</div>
 			<div class="field">
 				<label for="email_visible">
-					<input type="checkbox" name="email_visible"<?php echo ($user->getVisible()['email'] ? ' checked="1"' : '') ?>>Email Visible
+					<input type="checkbox" name="email_visible"<?php echo ($visibilities['email'] ? ' checked="1"' : '') ?>>Email Visible
 				</label>
 			</div>
 			<div class="field">
 				<label for="about_visible">
-					<input type="checkbox" name="about_visible"<?php echo ($user->getVisible()['about'] ? ' checked="1"' : '') ?>>About Visible
+					<input type="checkbox" name="about_visible"<?php echo ($visibilities['about'] ? ' checked="1"' : '') ?>>About Visible
 				</label>
 			</div>
 			<div class="field">
 				<label for="posts_visible">
-					<input type="checkbox" name="posts_visible"<?php echo ($user->getVisible()['posts'] ? ' checked="1"' : '') ?>>Posts Visible
+					<input type="checkbox" name="posts_visible"<?php echo ($visibilities['posts'] ? ' checked="1"' : '') ?>>Posts Visible
 				</label>
 			</div>
 			<div class="field">
 				<label for="about">About</label><br>
 				<textarea name="about" cols="40" rows="10"><?php echo (Input::get('about') ? escape(Input::get('about')) : $user->getAbout()); ?></textarea>
 			</div>
+
+			<div class="field">
+				<label for="image">Profile Image</label><br />
+				<?php
+					if($_GET['e'] == "error") {
+						echo '<span style="font-size: 12px; color: red;">Upload unsucessful!</span><br />';
+					}
+				?>
+				<input type="file" name="image"><br />
+				<span style="font-size: 12px;">Max File Size: 2MB (PNG, JPG, JPEG, GIF accepted)</span>
+			</div>
 			<input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
-			<input type="submit" value="Update">
+			<input style="float: left;" type="submit" value="Update">
 		</form>
 	</div>
 	<div class="rcol">
