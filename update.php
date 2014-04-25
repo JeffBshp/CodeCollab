@@ -128,7 +128,7 @@ if(!$user->isLoggedIn()) {
 			<div class="field">
 				<label for="image">Profile Image</label><br />
 				<?php
-					if($_GET['e'] == "error") {
+					if(isset($_GET['e']) && ($_GET['e'] == "error")) {
 						echo '<span style="font-size: 12px; color: red;">Upload unsucessful!</span><br />';
 					}
 				?>

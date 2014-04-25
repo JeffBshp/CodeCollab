@@ -1,0 +1,50 @@
+Jeff Bishop, Zeth Schlenker
+CSCE 361 - Spring 2014
+Group 7
+
+***************************
+		CodeCollab
+***************************
+
+Site Setup
+============
+
+
+
+------------------------------------------------------------------
+
+Organization
+============
+
+Folders:
+	classes:
+		Contains all relevant classes for the system, each appropriately named
+	core:
+		Contains file init.php which stores the configuration for database login information and form session tokens. Also handles the PHP autoloading functionality.
+	css:
+		Contains normalize.css, which creates a margin-free and padding-free environment to begin styling. Also contains styles.css which contains all relevant styling for the website.
+	db:
+		Contains db.sql which must be run to initialize all tables in the database.
+	functions:
+		Contains general-purpose functions for use within the site. Contains sanitize.php which strips slashes and cleans data submitted to the database. Also contains thumbnail.php which properly generates a thumbnail from the given input image file.
+	images:
+		The users subfolder within images contains all uploaded user profile images.
+	includes:
+		Contains navigation.php, searchbar.php, and sidebar.php, which are included in every page, and serve as templates for the navigation bar and the right-hand column of every page.
+	Michelf:
+		Contains the library used for Markdown syntax within posts. Credit goes to Michael Fortin for creating this library: https://github.com/michelf/php-markdown
+
+Main files:
+	index.php:
+		Main page of the website. Displays recent and top posts.
+	login.php:
+		Page to log in.
+	register.php:
+		Page to register as a user for the website.
+	post.php:
+		Page to view post with a valid post id.
+	profile.php:
+		Page to view user profile with a valid username.
+	search.php:
+		Page to search post titles of the website.
+
