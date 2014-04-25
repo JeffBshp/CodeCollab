@@ -100,11 +100,11 @@ if(Input::exists()) {
 		}
 		
 		$visibilities = $userProfile->getVisible();
-		if($visibilities['name']) {
+		if($owned || $visibilities['name']) {
 			echo '<p>Full Name: ' . escape($userProfile->getFullName()) . '</p>';
 		}
 		
-		if($visibilities['email']) {
+		if($owned || $visibilities['email']) {
 			echo '<p>Email Address: ' . $userProfile->getEmail() . '</p>';
 		}
 		
